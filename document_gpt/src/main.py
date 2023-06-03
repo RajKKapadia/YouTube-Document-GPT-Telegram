@@ -27,7 +27,7 @@ def telegram_api():
                 return 'OK', 200
             if telegram_data['is_document']:
                 response = generate_file_response(
-                    telegram_data['file_id'], telegram_data['mime_type'])
+                    telegram_data['file_id'], telegram_data['mime_type'], telegram_data['sender_id'])
                 send_message(telegram_data['sender_id'], response)
                 return 'OK', 200
         except:

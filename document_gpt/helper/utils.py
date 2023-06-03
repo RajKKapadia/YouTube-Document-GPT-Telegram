@@ -1,6 +1,6 @@
 import os
 
-from document_gpt.helper.telegram_api import get_file_path, save_file_and_get_local_path
+from document_gpt.helper.telegram_api import get_file_path, save_file_and_get_local_path, send_message
 from document_gpt.helper.conversation import create_conversation
 from document_gpt.helper.create_index import create_index
 
@@ -71,7 +71,7 @@ def generate_text_response(text: str) -> str:
         return 'We are facing some technical issue.'
 
 
-def generate_file_response(file_id: str, mime_type: str) -> str:
+def generate_file_response(file_id: str, mime_type: str, sender_id: str) -> str:
 
     if 'pdf' not in mime_type:
         return 'The bot can only understand PDF files at this moment.'
@@ -83,6 +83,7 @@ def generate_file_response(file_id: str, mime_type: str) -> str:
 
         if local_file_path['status'] == 1:
             try:
+                send_message(sender_id, 'Processing the file and generating the knowledge...')
                 create_index(local_file_path['local_file_path'])
                 os.unlink(local_file_path['local_file_path'])
                 return 'File saved successfully.'
